@@ -427,7 +427,71 @@ $response = (new \FedexRest\Services\AddressValidation\AddressValidation())
 ```
 
 #### Create Shipment
-###### Example
+###### Example(Payment TYPE IS THIRD_PARTY OR COLLECT)
+```php
+$request = (new CreateShipment())
+            ->setAccessToken((string) $this->auth->authorize()->access_token)
+            ->setAccountNumber(749999999)
+            ->setServiceType(ServiceType::_FEDEX_GROUND)
+            ->setLabelResponseOptions(LabelResponseOptionsType::_URL_ONLY)
+            ->setPackagingType(PackagingType::_YOUR_PACKAGING)
+            ->setPickupType(PickupType::_DROPOFF_AT_FEDEX_LOCATION)
+            ->setShippingChargesPayment((new ShippingChargesPayment())
+                ->setPaymentType('THIRD_PARTY')
+                ->setPayor((new Payor())
+                    ->setResponsibleParty((new ResponsibleParty())
+                        ->setThirdAccountNumber(748888888)
+                    )
+                )
+            )
+            ->setShipDatestamp(Carbon::now()->addDays(3)->format('Y-m-d'))
+            ->setLabel((new Label())
+                ->setLabelStockType(LabelStockType::_STOCK_4X6)
+                ->setImageType(ImageType::_PDF)
+            )
+            ->setShipper(
+                (new Person)
+                    ->setPersonName('SHIPPER NAME')
+                    ->setPhoneNumber('1234567890')
+                    ->withAddress(
+                        (new Address())
+                            ->setCity('Collierville')
+                            ->setStreetLines('SHIPPER STREET LINE 1')
+                            ->setStateOrProvince('TN')
+                            ->setCountryCode('US')
+                            ->setPostalCode('38017')
+                    )
+            )
+            ->setRecipients(
+                (new Person)
+                    ->setPersonName('RECEIPIENT NAME')
+                    ->setPhoneNumber('1234567890')
+                    ->withAddress(
+                        (new Address())
+                            ->setCity('Irving')
+                            ->setStreetLines('RECIPIENT STREET LINE 1')
+                            ->setStateOrProvince('TX')
+                            ->setCountryCode('US')
+                            ->setPostalCode('75063')
+                    )
+            )
+            ->setLineItems((new Item())
+                ->setItemDescription('lorem Ipsum')
+                ->setWeight(
+                    (new Weight())
+                        ->setValue(1)
+                        ->setUnit(WeightUnits::_POUND)
+                )
+                ->setDimensions((new Dimensions())
+                    ->setWidth(12)
+                    ->setLength(12)
+                    ->setHeight(12)
+                    ->setUnits(LinearUnits::_INCH)
+                )
+            )->request();
+```
+
+###### Example(Payment TYPE IS SENDER)
 ```php
 $request = (new CreateShipment())
             ->setAccessToken((string) $this->auth->authorize()->access_token)
@@ -839,7 +903,48 @@ stdClass Object
 ```
 </details>
 
-#### Create Tag
+
+#### Cancel Shipment
+###### Example
+```php
+$response = (new CancelShipment())
+            ->setAccessToken($token)
+            ->setAccountNumber($fedExConfig['account_number'])
+            ->setTrackingNumber($trackingNumber)
+            ->request();
+```
+
+###### Sample Response
+<details>
+  <summary>Show Response</summary>
+
+```php
+stdClass Object
+(
+    [transactionId] => APIF_SV_SHPC_TxID3928f796-f4fe-427f-82b3-a46a3f2305b5
+    [output] => Array
+        (
+            [alerts] => Array
+                (
+                    [0] => Array
+                        (
+                            [code] => VIRTUAL.RESPONSE
+                            [message] => This is a Virtual Response.
+                            [alertType] => NOTE
+                        )
+
+                )
+            [cancelledShipment] => 1
+            [cancelledHistory] => 1
+        )
+)
+
+
+```
+</details>
+
+
+## Create Tag
 ###### Example
 ```php
 $request = (new CreateTagRequest())
