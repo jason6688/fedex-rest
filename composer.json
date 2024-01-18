@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "name": "jason/fedex-rest",
+  "name": "jason6688/fedex-rest",
   "description": "New FedEx Rest API wrapper",
   "keywords": [
     "shipping",
