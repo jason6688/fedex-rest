@@ -3,6 +3,7 @@
 namespace FedexRest\Services\Ship;
 
 use FedexRest\Entity\Item;
+use FedexRest\Services\Ship\Entity\CustomsClearanceDetail;
 use FedexRest\Services\Ship\Entity\Label;
 use FedexRest\Entity\Person;
 use FedexRest\Services\Ship\Entity\ShipmentSpecialServices;
@@ -41,6 +42,7 @@ class CreateShipment extends AbstractRequest
     protected bool $oneLabelAtATime = FALSE;
     protected string $preferredCurrency = '';
     protected int $totalPackageCount;
+    protected CustomsClearanceDetail $customsClearanceDetail;
 
     /**
      * {@inheritDoc}
@@ -504,6 +506,10 @@ class CreateShipment extends AbstractRequest
         if (!empty($this->totalPackageCount)) {
             $data['totalPackageCount'] = $this->totalPackageCount;
         }
+
+        if (!empty($this->customsClearanceDetail)) {
+            $data['customsClearanceDetail'] = $this->customsClearanceDetail->prepare();
+        }
         return $data;
     }
 
@@ -563,5 +569,17 @@ class CreateShipment extends AbstractRequest
             return $e->getMessage();
         }
     }
+
+
+    /**
+     * @param CustomsClearanceDetail $customsClearanceDetail
+     * @return $this
+     */
+    public function setCustomsClearanceDetail(CustomsClearanceDetail $customsClearanceDetail): CreateShipment {
+        $this->customsClearanceDetail = $customsClearanceDetail;
+        return $this;
+    }
+
+
 
 }

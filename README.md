@@ -488,7 +488,24 @@ $request = (new CreateShipment())
                     ->setHeight(12)
                     ->setUnits(LinearUnits::_INCH)
                 )
-            )->request();
+                ->setCustomerReferences(
+                    (new CustomerReference())->setCustomerReferenceType('P_O_NUMBER')->setValue('160578380'),
+                    (new CustomerReference())->setCustomerReferenceType('CUSTOMER_REFERENCE')->setValue('13409988252')
+                )//自定义PO,REF,INV,DEPT号。
+            )
+            ->setCustomsClearanceDetail(
+                (new CustomsClearanceDetail())
+                    ->setCommercialInvoice(
+                        (new CommercialInvoice())->setCustomerReferences(
+                            (new CustomerReference())->setCustomerReferenceType('P_O_NUMBER')->setValue('160578380'),
+                            (new CustomerReference())->setCustomerReferenceType('CUSTOMER_REFERENCE')->setValue('13409988252')
+                        )
+                    )//自定义PO,REF,INV,DEPT号。
+                    ->setCommodities(
+                        (new Commodity())->setDescription('create shipment of 160578380')
+                    )
+            )
+            ->request();
 ```
 
 ###### Example(Payment TYPE IS SENDER)
