@@ -4,28 +4,23 @@ namespace FedexRest\Tests\Authorization;
 
 use FedexRest\Authorization\Authorize;
 use FedexRest\Exceptions\MissingAuthCredentialsException;
-use PHPUnit\Framework\TestCase;
+use FedexRest\Tests\BaseTestCase;
 
-class AuthorizationTest extends TestCase
+class AuthorizationTest extends BaseTestCase
 {
 
     public function testAuth()
     {
-        $auth = (new Authorize)
-            ->setClientId('l7749d031872cf4b55a7889376f360d045')
-            ->setClientSecret('bd59d91084e8482895d4ae2fb4fb79a3');
+        $this->setupAuth();
 
-        $this->assertObjectHasProperty('access_token', $auth->authorize());
+        $this->assertObjectHasProperty('access_token', $this->auth->authorize());
     }
 
     public function testAuthRaw()
     {
-        $auth = (new Authorize)
-            ->asRaw()
-            ->setClientId('l7749d031872cf4b55a7889376f360d045')
-            ->setClientSecret('bd59d91084e8482895d4ae2fb4fb79a3');
+        $this->setupAuth(true);
 
-        $this->assertObjectHasProperty('headers', $auth->authorize());
+        $this->assertObjectHasProperty('headers', $this->auth->authorize());
     }
 
     public function testMissingCredentials()
