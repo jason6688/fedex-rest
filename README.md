@@ -35,7 +35,7 @@ FedEx Rest API documentation https://developer.fedex.com/api/en-us/get-started.h
 
 | Library Version | Fedex Rest Api Version |
 |-----------------|------------------------|
-| ^0.1            | v1                     |
+| ^0.1.4          | v1                     |
 
 #### Installation
 `composer require jason/fedex-rest "^0.1"`
@@ -473,6 +473,7 @@ $request = (new CreateShipment())
                             ->setStateOrProvince('TX')
                             ->setCountryCode('US')
                             ->setPostalCode('75063')
+                            ->setResidential(false)
                     )
             )
             ->setLineItems((new Item())
